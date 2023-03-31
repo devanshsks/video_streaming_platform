@@ -7,7 +7,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { AuthContext } from './pages/authContext/AuthContext';
+import { AuthContext } from './authContext/AuthContext';
 import './App.css';
 import { useContext } from 'react';
 

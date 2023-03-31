@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { useContext } from "react"
-import { AuthContext } from "../authContext/AuthContext"
+import { AuthContext } from "../../authContext/AuthContext"
 import "./login.css"
-import { login } from "../authContext/apicalls"
+import { login } from "../../authContext/apicalls"
 import { useNavigate } from "react-router-dom"
 
 

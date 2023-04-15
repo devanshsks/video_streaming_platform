@@ -36,8 +36,8 @@ const Card = ({ key, item }) => {
       };
       
     const handleCLick = () => {
-    //   window.location.href = `/watch/${item._id}`;
-    alert("not implemented yet! Sorry");
+      window.location.href = `/watch/${item._id}`;
+    // alert("not implemented yet! Sorry");
     };
   
     const user = useContext(AuthContext);

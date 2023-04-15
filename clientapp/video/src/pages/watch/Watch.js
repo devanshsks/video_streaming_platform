@@ -163,9 +163,9 @@ const Watch = () => {
                 setMedia(data);
                 setMediaType(data.type);
                 setMediaUrl(data.mediaUrl);
-                setLiked(data.upvotes.includes(USER.user._id));
+                setLiked(data.upvotes.includes(USER._id));
                 setLikes(data.upvotes.length);
-                setDisliked(data.downvotes.includes(USER.user._id));
+                setDisliked(data.downvotes.includes(USER._id));
                 setDislikes(data.downvotes.length);
             } catch (error) {
                 console.log(error);

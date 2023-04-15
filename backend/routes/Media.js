@@ -24,4 +24,114 @@ router.get("/recommended", verify, async (req, res) => {
     res.json(uploadsWithUserInfo);
   });
 
+  router.post("/get", verify, async (req, res) => {
+    const media_id = req.body.mediaId;
+  
+    try {
+      const media = await Media.findById(media_id);
+      if (!media.isPrivate) {
+        const mediaWithUserInfo = await getMediaWithUserInfo(media);
+        res.json(mediaWithUserInfo);
+      } else {
+        const user_id = req.user.id;
+        if (media.user == user_id) {
+          res.json(mediaWithUserInfo);
+        } else {
+          res.status(403).json("This media is private");
+        }
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  router.put("/:id/like", verify, async (req, res) => {
+    const media_id = req.params.id;
+    const user_id = req.user.id;
+    try {
+      const media = await Media.findById(media_id);
+      if (!media) {
+        res.status(404).json("Media not found");
+      } else {
+        if (media.upvotes.includes(user_id)) {
+          res.status(400).json("Already Liked");
+        } else {
+          await Media.findByIdAndUpdate(media_id, {
+            $push: { upvotes: user_id },
+          });
+          await Media.findByIdAndUpdate(media_id, {
+            $pull: { downvotes: user_id },
+          });
+          res.status(200).json("Liked");
+        }
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  router.put("/:id/dislike", verify, async (req, res) => {
+    const media_id = req.params.id;
+    const user_id = req.user.id;
+    try {
+      const media = await Media.findById(media_id);
+      if (!media) {
+        res.status(404).json("Media not found");
+      } else {
+        if (media.downvotes.includes(user_id)) {
+          res.status(400).json("Already Disliked");
+        } else {
+          await Media.findByIdAndUpdate(media_id, {
+            $push: { downvotes: user_id },
+          });
+          await Media.findByIdAndUpdate(media_id, {
+            $pull: { upvotes: user_id },
+          });
+          res.status(200).json("Disliked");
+        }
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  router.get("/forcedownload/:id", async (req, res) => {
+    const mediaId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(mediaId)) {
+      res.status(400).json("Invalid media id");
+      return;
+    }
+  
+    const media = await Media.findById(mediaId);
+    if (!media) {
+      res.status(404).json("Media not found");
+      return;
+    }
+    const media_url = media.mediaUrl;
+    // set a proxy to force download
+    const proxy = httpProxy.createProxyServer({
+      target: media_url,
+      changeOrigin: true,
+      ws: true,
+    });
+  
+    proxy.on('proxyRes', function (proxyRes, req, res) {
+      // forcing download
+      proxyRes.headers['Content-Disposition'] = 'attachment';
+    });
+    
+  
+    proxy.on("error", (err, req, res) => {
+      console.log(err);
+      res.status(500).send("Something went wrong.");
+    });
+  
+    proxy.web(req, res);
+  });
+  
+  const getMediaWithUserInfo = async (media) => {
+    const user = await User.findById(media.user);
+    return { ...media._doc, username: user.name };
+  };
+
 export default router;

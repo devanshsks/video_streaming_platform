@@ -12,6 +12,7 @@ import './App.css';
 import { useContext } from 'react';
 import Upload from './pages/upload/Upload';
 import Navbar from './components/Navbar';
+import YourUpload from './pages/YourUpload';
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -29,7 +30,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element = {user ? <Home /> : <Login />} />
           {user && (
+            <>
             <Route path="/upload" element={<Upload />} />
+            <Route path="/myuploads" element={<YourUpload />} />
+            </>
           )}
       </Routes>
       </Router>

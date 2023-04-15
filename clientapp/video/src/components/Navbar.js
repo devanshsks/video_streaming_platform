@@ -22,7 +22,10 @@ const Navbar = () => {
           <button className="nav-link" onClick={handleClick}>Logout</button>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/upload">upload</a>
+          <a className="nav-link" href="/upload">Upload</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/myuploads">My Uploads</a>
         </li>
       </ul>
       <form className="d-flex" role="search">

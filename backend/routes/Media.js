@@ -4,6 +4,12 @@ import Media from "../models/media.js";
 import verify from "../verifyToken.js";
 import User from "../models/user.js";
 
+router.get("/userAll", verify, async (req, res) => {
+  const user_id = req.user.id;
+  const uploads = await Media.find({ user: user_id });
+  res.json(uploads);
+});
+
 router.get("/recommended", verify, async (req, res) => {
     const user_id = req.user.id;
     // all media that the user has not uploaded

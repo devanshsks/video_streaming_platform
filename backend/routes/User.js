@@ -57,4 +57,26 @@ router.post("/addtoFavorites", verify, async (req, res) => {
 
   });
 
+  router.post("/favorites", verify, async (req, res) => {
+    const userId = req.user.id;
+    try {
+        const result = await User.findById(userId);
+        const favorites = result.favorites;
+        const media = [];
+        favorites.forEach(async (favorite) => {
+            const mediadetails = await Media.findById(favorite);
+            media.push(mediadetails);
+          });
+          const interval = setInterval(() => {
+            if (media.length === favorites.length) {
+              res.json(media);
+              clearInterval(interval);
+              return;
+            }
+          }, 100);
+    } catch (err) {
+        res.status(422).json({ error: err });
+    }
+  });
+
   export default router;

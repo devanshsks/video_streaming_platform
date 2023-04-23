@@ -14,6 +14,7 @@ import Upload from './pages/upload/Upload';
 import Navbar from './components/Navbar';
 import YourUpload from './pages/YourUpload';
 import Watch from './pages/watch/Watch';
+import Favorite from './pages/Favorite';
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -35,6 +36,7 @@ function App() {
             <Route path="/upload" element={<Upload />} />
             <Route path="/myuploads" element={<YourUpload />} />
             <Route path="/watch/:mediaId" element={<Watch />} />
+            <Route path="/favorites" element={<Favorite />} />
             </>
           )}
       </Routes>

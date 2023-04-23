@@ -3,6 +3,8 @@ const router = express.Router();
 import Media from "../models/media.js";
 import verify from "../verifyToken.js";
 import User from "../models/user.js";
+import httpProxy from "http-proxy";
+import mongoose from "mongoose";
 
 router.get("/userAll", verify, async (req, res) => {
   const user_id = req.user.id;

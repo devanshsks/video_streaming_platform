@@ -15,6 +15,8 @@ import Navbar from './components/Navbar';
 import YourUpload from './pages/YourUpload';
 import Watch from './pages/watch/Watch';
 import Favorite from './pages/Favorite';
+import Playlists from './pages/playlist/PlayLists';
+import OpenPlayList from './pages/playlist/OpenPlayList';
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -37,6 +39,8 @@ function App() {
             <Route path="/myuploads" element={<YourUpload />} />
             <Route path="/watch/:mediaId" element={<Watch />} />
             <Route path="/favorites" element={<Favorite />} />
+            <Route path="/playlists" element={<Playlists />} />
+            <Route path="/playlists/:id" element={<OpenPlayList />} />
             </>
           )}
       </Routes>

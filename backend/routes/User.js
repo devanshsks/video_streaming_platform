@@ -79,4 +79,23 @@ router.post("/addtoFavorites", verify, async (req, res) => {
     }
   });
 
+  router.post("/getuserpublic", verify, async(req, res) => {
+    const { userId } = req.body;
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      try {
+        const result = await User.findById(userId);
+        const user = {
+          username: result.name,
+          email: result.email,
+          timestamp: result.timestamp,
+        }
+        res.json(user);    
+      } catch (err) {
+        return res.status(422).json({ error: err });
+      }
+    } else {
+      res.json({ error: "Invalid User Id" });
+    }
+  });
+
   export default router;

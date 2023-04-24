@@ -3,6 +3,16 @@ import express from "express";
 const router = express.Router();
 import verify from "../verifyToken.js";
 
+router.get("/all", verify, async (req, res) => {
+    const userId = req.user.id;
+    try {
+      const playlists = await PlayList.find({ user: userId });
+      res.status(200).json(playlists);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
 router.post("/add", verify, async (req, res) => {
     const userId = req.user.id;
     const newPlaylist = new PlayList({
@@ -89,8 +99,10 @@ router.post("/delete", verify, async(req, res) => {
     const { playlistId, mediaId } = req.body;
     const userId = req.user.id;
     try {
-        const result = PlayList.findById(playlistId);
+        const result = await PlayList.findById(playlistId);
         if(result.user != userId){
+            console.log(result.user);
+            console.log(userId);
             return res.status(422).json({ error: "Not authorized" });
         }
         else{
@@ -103,6 +115,7 @@ router.post("/delete", verify, async(req, res) => {
                 },
                 { new: true},
             );
+            res.status(200).json("Successfully removed from playlist");
         }
     } catch (err) {
         res.status(422).json({ error: err });

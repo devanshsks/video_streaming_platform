@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { storage } from '../../firebase'
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
+import Swal from "sweetalert2"
 
 const Upload = () => {
   const [type, setType] = useState(null);
@@ -20,10 +21,14 @@ const Upload = () => {
 
   const handleUpload = () => {
     if (!isImgPicked && !isMediaPicked) {
-      alert("Please select an image and a media file");
-      return;
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select an image and a media file",
+      });
     }
 
+    Swal.showLoading();
 
     const imgref = ref(storage, `images/` + Date.now() + img.file.name);
     const mediaref = ref(storage, `media/` + Date.now() + media.file.name);
@@ -32,6 +37,7 @@ const Upload = () => {
       getDownloadURL(snapshot.ref).then((url) => {
         setImgUrl(url);
         console.log(url);
+        Swal.hideLoading();
         setUploadState(true);
       });
     });
@@ -45,18 +51,26 @@ const Upload = () => {
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       setMedia({ ...media, loaded: progress });
     });
+    console.log(media.loaded);
   };
 
   const handleSubmit = () => {
     if (!mediaUrl) {
-      alert("Please wait for the upload to complete");
-      return;
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please wait for the upload to complete",
+      });
     }
     if (!title || !description || !tags) {
-      alert("Please fill all the fields");
-      return;
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please fill all the fields",
+      });
     }
 
+    Swal.showLoading();
 
     axios
       .post(
@@ -79,11 +93,17 @@ const Upload = () => {
         }
       )
       .then((res) => {
+        Swal.hideLoading();
         console.log(res);
-        alert("your video has been uploaded successfully")
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your video has been uploaded",
+        });
         window.location.reload();
       })
       .catch((err) => {
+        Swal.hideLoading();
         console.log(err);
       });
   };
@@ -99,7 +119,10 @@ const Upload = () => {
     } else if (e.target.files[0].type.includes("audio")) {
       setType("audio");
     } else {
-      alert("Please select a Audio or Video file Only!");
+      Swal.fire({
+        icon: "error",
+        text: "Please select a Audio or Video file Only!",
+      });
       e.target.value = null;
       return;
     }

@@ -5,7 +5,7 @@ import VideoPlayer from './VideoPlayer'
 import AudioPlayer from './AudioPlayer'
 import { AuthContext } from '../../authContext/AuthContext'
 import { useState, useEffect, useContext } from 'react'
-
+import AddToPlaylist from './AddToPlaylist'
 
 const Watch = () => {
     const user = useContext(AuthContext);
@@ -306,6 +306,7 @@ const Watch = () => {
                     </div>
                 </>
             )}
+            <AddToPlaylist mediaId={mediaId} />
         </div>
     )
 }

@@ -15,7 +15,7 @@ router.get("/userAll", verify, async (req, res) => {
 router.get("/recommended", verify, async (req, res) => {
     const user_id = req.user.id;
     // all media that the user has not uploaded
-    const uploads = await Media.find({ user: { $ne: user_id } });
+    const uploads = await Media.find({ user: { $ne: user_id } , private: false});
     // add user info to each media
     const uploadsWithUserInfo = await Promise.all(
       uploads.map(async (upload) => {
@@ -31,8 +31,8 @@ router.get("/recommended", verify, async (req, res) => {
   
     try {
       const media = await Media.findById(media_id);
-      if (!media.isPrivate) {
-        const mediaWithUserInfo = await getMediaWithUserInfo(media);
+      const mediaWithUserInfo = await getMediaWithUserInfo(media);
+      if (!media.private) {
         res.json(mediaWithUserInfo);
       } else {
         const user_id = req.user.id;

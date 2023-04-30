@@ -1,4 +1,4 @@
-import exprees from "express";
+import express from "express";
 const router = express.Router();
 import Media from "../models/media.js";
 import User from "../models/user.js";

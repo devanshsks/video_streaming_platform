@@ -6,6 +6,7 @@ import uploadroute from "./routes/Upload.js"
 import mediaroute from "./routes/Media.js"
 import userroute from "./routes/User.js"
 import playlistroute from "./routes/PlayList.js"
+import adminRoute from "./routes/Admin.js";
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use("/api/upload",uploadroute);
 app.use("/api/media",mediaroute);
 app.use("/api/user",userroute);
 app.use("/api/playlists",playlistroute);
+app.use('/api/admin', adminRoute);
 
 app.listen(process.env.PORT, () => {
     console.log("Backend server is running");

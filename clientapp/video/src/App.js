@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { AuthContext } from './authContext/AuthContext';
 import './App.css';
-import { useContext } from 'react';
+import { useContext, useState, createContext } from 'react';
 import Upload from './pages/upload/Upload';
 import Navbar from './components/Navbar';
 import YourUpload from './pages/YourUpload';
@@ -17,18 +17,27 @@ import Watch from './pages/watch/Watch';
 import Favorite from './pages/Favorite';
 import Playlists from './pages/playlist/PlayLists';
 import OpenPlayList from './pages/playlist/OpenPlayList';
+import Search from './pages/search/Search';
+
+
+export const searchContext = createContext();
 
 function App() {
   const { user } = useContext(AuthContext);
+  
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   return (
     <>
+    <searchContext.Provider value={{ searchQuery, setSearchQuery }}>
+    
+    
+    <Router>
     <div>
     { user && (
       <Navbar />
     )}
     </div>
-    <Router>
       <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
@@ -41,10 +50,13 @@ function App() {
             <Route path="/favorites" element={<Favorite />} />
             <Route path="/playlists" element={<Playlists />} />
             <Route path="/playlists/:id" element={<OpenPlayList />} />
+            <Route path="/search" element={<Search />} />
             </>
           )}
       </Routes>
       </Router>
+      </searchContext.Provider>
+      
       </>
   );
 }

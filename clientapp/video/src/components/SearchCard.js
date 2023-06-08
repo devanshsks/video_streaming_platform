@@ -38,9 +38,9 @@ const SearchCard = ({ key, item }) => {
       window.location.href = `/watch/${item._id}`;
     };
   
-    const loadImg = () => {
-      return item.imgUrl;
-    };
+    // const loadImg = () => {
+    //   return item.imgUrl;
+    // };
   
     return (
       <div
@@ -64,7 +64,7 @@ const SearchCard = ({ key, item }) => {
           {/* background opaque 70% */}
           <i
             className={
-              item.type == "audio"
+              item.type === "audio"
                 ? "fa fa-headphones p-2"
                 : "fa fa-play-circle p-2"
             }
@@ -92,6 +92,7 @@ const SearchCard = ({ key, item }) => {
               <div className="mx-2 d-flex justify-content-center mt-1">
                 <img
                   src={"https://ui-avatars.com/api/?name=" + item.username}
+                  alt=""
                   className="img rounded"
                   style={{ width: "25px", height: "25px" }}
                 ></img>

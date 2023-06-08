@@ -2,9 +2,20 @@ import React from 'react'
 import { useContext } from 'react'
 import { AuthContext } from '../authContext/AuthContext'
 import { logout } from '../authContext/AuthActions'
+import { searchContext } from '../App'
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     const {dispatch} = useContext(AuthContext);
+    const search = useContext(searchContext);
+    // console.log(search.searchQuery)
+    const navigate = useNavigate();
+    const handleSearch = (e) => {
+      e.preventDefault();
+      if (search.searchQuery) {
+        navigate(`/search?query=${encodeURIComponent(search.searchQuery)}`);
+      }
+    };
   const handleClick = () =>{
     dispatch(logout());
     window.location.replace("/");
@@ -35,8 +46,22 @@ const Navbar = () => {
         </li>
       </ul>
       <form className="d-flex" role="search">
-        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-        <button className="btn btn-outline-success" type="submit">Search</button>
+        <input
+          className="form-control mr-sm-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          id="navbar-search"
+          style={{ width: "300px" }}
+          value={search.searchQuery}
+          onChange={(e) => search.setSearchQuery(e.target.value)}
+        />
+        <button
+          className="btn btn-outline-success my-2 my-sm-0"
+          onClick={handleSearch}
+        >
+          <i className="fa fa-search"></i>
+        </button>
       </form>
     </div>
   </div>

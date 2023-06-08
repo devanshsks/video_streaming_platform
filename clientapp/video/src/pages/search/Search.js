@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { searchContext } from "../../SearchContext/SearchContext";
+// import { useSearchParams } from "react-router-dom";
+import { searchContext } from "../../App";
 import SearchCard from "../../components/SearchCard";
 
 const Search = () => {
@@ -28,7 +28,7 @@ const Search = () => {
               },
             }
           );
-  
+            console.log(res.data);
           setSearchResults(res.data);
         } catch (err) {
           console.log(err);
@@ -38,7 +38,7 @@ const Search = () => {
     }, [search.searchQuery, searchSort, searchFilter]);
   
     return (
-      <Layout>
+      <div>
         {/* sort by and filter */}
         <div className="d-flex justify-content-between my-1 d-none d-md-flex">
           <select
@@ -94,7 +94,7 @@ const Search = () => {
             </div>
           )
         }
-      </Layout>
+      </div>
     );
   };
   

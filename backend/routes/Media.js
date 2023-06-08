@@ -26,6 +26,67 @@ router.get("/recommended", verify, async (req, res) => {
     res.json(uploadsWithUserInfo);
   });
 
+  router.post("/search", verify, async (req, res) => {
+    const user_id = req.user.id;
+    const { query, sort, filter } = req.body;
+    console.log(query);
+    console.log(sort);
+    console.log(filter);
+    if (query === "") {
+      console.log("adf");
+      res.json([]);
+      return;
+    }
+    // title, description, tags match query, public, not user's media
+    // sort "NEWEST", "OLDEST", "MOST_STRAMED", "MOST_UPVOTE"
+    // filter "ALL", "VIDEO", "AUDIO"
+
+    const filterQuery = filter === "all" ? {} : { type: filter };
+  
+    const uploads = await Media.find({
+      $and: [
+        { $or : [
+          // if public 
+          { private: false },
+          // if private and user is owner
+          { $and: [{ private: true }, { user: user_id }] },
+        ] },
+        {
+          $or: [
+            { title: { $regex: query, $options: "i" } },
+            { description: { $regex: query, $options: "i" } },
+            { tags: { $regex: query, $options: "i" } },
+          ],
+        },
+        {
+          ...filterQuery,
+        },
+      ],
+    });
+  
+    // sort
+    if (sort === "NEWEST") {
+      uploads.sort((a, b) => b.createdAt - a.createdAt);
+    } else if (sort === "OLDEST") {
+      uploads.sort((a, b) => a.createdAt - b.createdAt);
+    } else if (sort === "MOST_STRAMED") {
+      uploads.sort((a, b) => b.streams - a.streams);
+    } else if (sort === "MOST_UPVOTE") {
+      uploads.sort((a, b) => b.upvotes - a.upvotes);
+    }
+    const maxResult = 30;
+    uploads.splice(maxResult);
+  
+    const uploadsWithUserInfo = await Promise.all(
+      uploads.map(async (upload) => {
+        const user = await User.findById(upload.user);
+        return { ...upload._doc, username: user.name };
+      })
+    );
+    console.log(uploadsWithUserInfo);
+    res.json(uploadsWithUserInfo);
+  });
+
   router.post("/get", verify, async (req, res) => {
     const media_id = req.body.mediaId;
   

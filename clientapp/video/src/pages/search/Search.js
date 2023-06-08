@@ -28,7 +28,7 @@ const Search = () => {
               },
             }
           );
-            console.log(res.data);
+            // console.log(res.data);
           setSearchResults(res.data);
         } catch (err) {
           console.log(err);

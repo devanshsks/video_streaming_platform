@@ -29,9 +29,9 @@ router.get("/recommended", verify, async (req, res) => {
   router.post("/search", verify, async (req, res) => {
     const user_id = req.user.id;
     const { query, sort, filter } = req.body;
-    console.log(query);
-    console.log(sort);
-    console.log(filter);
+    // console.log(query);
+    // console.log(sort);
+    // console.log(filter);
     if (query === "") {
       console.log("adf");
       res.json([]);
@@ -83,7 +83,7 @@ router.get("/recommended", verify, async (req, res) => {
         return { ...upload._doc, username: user.name };
       })
     );
-    console.log(uploadsWithUserInfo);
+    // console.log(uploadsWithUserInfo);
     res.json(uploadsWithUserInfo);
   });
 

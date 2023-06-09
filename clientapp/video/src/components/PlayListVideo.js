@@ -94,7 +94,7 @@ const PlayListVideo = ({ playlistId, mediaId }) => {
             minWidth: "300px",
             height: "200px",
             cursor: "pointer",
-            background: `url("${item.imgUrl}")`,
+            backgroundImage: `url("${item.imgUrl}")`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
@@ -158,6 +158,7 @@ const PlayListVideo = ({ playlistId, mediaId }) => {
               const maxTags = 6;
               return index >= maxTags ? null : (
                 <span
+                  key={index}
                   className="badge rounded-pill bg-dark mx-1"
                   style={{ fontSize: "12px", background: "rgba(0,0,0,0.5)" }}
                 >

@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -71,9 +72,10 @@ const Playlists = () => {
         </div>
         <div className="container">
           <div className="d-flex flex-wrap">
-            {playlists.map((playlist) => (
+            {React.Children.toArray(
+            playlists.map((playlist) => (
               <PlayListCard item={playlist} />
-            ))}
+            )))}
           </div>
         </div>
         </div>

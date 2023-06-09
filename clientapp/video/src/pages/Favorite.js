@@ -20,6 +20,7 @@ const Favorite = () => {
               }
             );
             setFavorites(data);
+            // console.log(data);
           } catch (err) {
             console.log(err);
           }
@@ -29,9 +30,10 @@ const Favorite = () => {
   return (
     <div className="favorites container">
         <div className="row">
-          {favorites.map((favorite) => (
-            <Card key={favorite._id} item={favorite} />
-          ))}
+          {React.Children.toArray(
+          favorites.map((favorite) => (
+            <Card key={favorite.id} item={favorite} />
+          )))}
           {
         // if no search results
          favorites.length === 0 && (

@@ -67,9 +67,15 @@ router.post("/addtoFavorites", verify, async (req, res) => {
             const mediadetails = await Media.findById(favorite);
             media.push(mediadetails);
           });
-          const interval = setInterval(() => {
+          const interval = setInterval(async() => {
             if (media.length === favorites.length) {
-              res.json(media);
+              const mediasWithUserInfo = await Promise.all(
+                media.map(async (m) => {
+                  const user = await User.findById(m.user);
+                  return { ...m._doc, username: user.name };
+                })
+              );
+              res.json(mediasWithUserInfo);
               clearInterval(interval);
               return;
             }

@@ -24,10 +24,11 @@ const YourUpload = () => {
   return (
     <div className="container">
         <div className="row">
-          {media.map((item) => {
+          {React.Children.toArray(
+          media.map((item) => {
             item.username = JSON.parse(localStorage.getItem("user")).name
             return <Card key={item.id} item={item} />
-            })}
+            }))}
         </div>
       </div>
   )

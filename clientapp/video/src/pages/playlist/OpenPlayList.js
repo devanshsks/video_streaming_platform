@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -100,9 +101,10 @@ const OpenPlayList = () => {
     return (
         <div className="row">
           <div className="col-12 col-md-7">
-            {media.map((media) => (
-              <PlayListVideo mediaId={media} playlistId={id} />
-            ))}
+            {React.Children.toArray(
+            media.map((media,index) => (
+              <PlayListVideo mediaId={media} playlistId={id} key={index}/>
+            )))}
           </div>
           <div className="col-12 col-md-5 px-4  py-3 bg-secondary text-white rounded">
             <div className="d-flex justify-content-between align-items-center">

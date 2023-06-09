@@ -41,7 +41,7 @@ function App() {
       <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/" element = {user ? <Home /> : <Login />} />
+          <Route path="/" element = {user ? <Home key="{user._id}" /> : <Login />} />
           {user && (
             <>
             <Route path="/upload" element={<Upload />} />

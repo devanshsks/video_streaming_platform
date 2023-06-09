@@ -18,6 +18,7 @@ const Home = () => {
       })
       .then((res) => {
         setContent(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         setContent("Error: " + err);
@@ -27,9 +28,10 @@ const Home = () => {
   return (
     <div className="container">
         <div className="row">
-          {content.map((item) => (
-            <Card key={item.id} item={item} />
-          ))}
+          {React.Children.toArray(
+          content.map((item) => (
+            <Card item={item} key={item.id} />
+          )))}
         </div>
       </div>
   )

@@ -18,7 +18,7 @@ const Home = () => {
       })
       .then((res) => {
         setContent(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => {
         setContent("Error: " + err);

@@ -44,6 +44,9 @@ const Navbar = () => {
         <li className="nav-item">
           <a className="nav-link" href="/playlists">Playlists</a>
         </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/room">Rooms</a>
+        </li>
       </ul>
       <form className="d-flex" role="search">
         <input

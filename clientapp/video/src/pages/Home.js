@@ -4,7 +4,7 @@ import axios from 'axios'
 import Card from '../components/Card'
 
 const Home = () => {
-  
+  // console.log(user);
   const [content, setContent] = useState([]);
 
   useEffect(() => {

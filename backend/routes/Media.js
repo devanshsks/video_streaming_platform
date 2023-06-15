@@ -5,6 +5,7 @@ import verify from "../verifyToken.js";
 import User from "../models/user.js";
 import httpProxy from "http-proxy";
 import mongoose from "mongoose";
+import Room from "../models/room.js";
 
 router.get("/userAll", verify, async (req, res) => {
   const user_id = req.user.id;
@@ -156,6 +157,37 @@ router.get("/recommended", verify, async (req, res) => {
     } catch (err) {
       res.status(500).json(err);
     }
+  });
+
+  router.get("/roomplaying/:id", async (req, res) => {
+    const room_id = req.params.id;
+  
+    if (!mongoose.Types.ObjectId.isValid(room_id)) {
+      res.status(400).json("Invalid room id");
+      return;
+    }
+    const room = await Room.findById(room_id);
+    if (!room) {
+      res.status(404).json("Room not found");
+      return;
+    }
+    const media = room.media;
+    if (!media) {
+      res.json();
+      return;
+    }
+    const proxy = httpProxy.createProxyServer({
+      target: media,
+      changeOrigin: true,
+      ws: true,
+    });
+  
+    proxy.on("error", (err, req, res) => {
+      console.log(err);
+      res.status(500).send("Something went wrong.");
+    });
+  
+    proxy.web(req, res);
   });
 
   router.get("/forcedownload/:id", async (req, res) => {

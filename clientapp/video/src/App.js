@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { AuthContext } from './authContext/AuthContext';
 import './App.css';
-import { useContext, useState, createContext } from 'react';
+import { useContext, useState, createContext, useEffect } from 'react';
 import Upload from './pages/upload/Upload';
 import Navbar from './components/Navbar';
 import YourUpload from './pages/YourUpload';
@@ -18,6 +18,12 @@ import Favorite from './pages/Favorite';
 import Playlists from './pages/playlist/PlayLists';
 import OpenPlayList from './pages/playlist/OpenPlayList';
 import Search from './pages/search/Search';
+import SocketContext,{socket} from './socketContext/SocketContext';
+import RoomContext from './roomContext/roomContext';
+import { ChatProvider } from './chatContext/ChatContext';
+import Room from './pages/room/Room';
+import Roomnew from './pages/roomnew/RoomNew';
+
 
 
 export const searchContext = createContext();
@@ -25,7 +31,23 @@ export const searchContext = createContext();
 function App() {
   const { user } = useContext(AuthContext);
   
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roomState, setRoomState] = useState({
+    roomId: null,
+    roomName: null,
+    isHost: false,
+    isJoined: false,
+  });
+  const [StreamMedia, setStreamMedia] = useState({
+    url:
+      localStorage.getItem("streamMedia") !== null || undefined
+        ? JSON.parse(localStorage.getItem("streamMedia")).url
+        : null,
+  });
+
+  useEffect(() => {
+    localStorage.setItem("streamMedia", JSON.stringify(StreamMedia));
+  }, [StreamMedia]);
 
   return (
     <>
@@ -33,6 +55,11 @@ function App() {
     
     
     <Router>
+    <SocketContext.Provider value={socket}>
+    <ChatProvider>
+    <RoomContext.Provider
+              value={{ roomState, setRoomState, StreamMedia, setStreamMedia }}
+            >
     <div>
     { user && (
       <Navbar />
@@ -51,9 +78,14 @@ function App() {
             <Route path="/playlists" element={<Playlists />} />
             <Route path="/playlists/:id" element={<OpenPlayList />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/room" element={<Roomnew />} />
+            <Route path="/room/:roomId" element={<Room />} />
             </>
           )}
       </Routes>
+      </RoomContext.Provider>
+      </ChatProvider>
+      </SocketContext.Provider>
       </Router>
       </searchContext.Provider>
       

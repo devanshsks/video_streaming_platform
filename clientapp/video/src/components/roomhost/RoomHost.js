@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import StreamSearchCard from "../streamSearchCard/streamSearchCard";
 
 export const RoomHost = ({ roomId }) => {
-    const { chatopen, setChatOpen, chatToggle } = useContext(chatContext);
+    const { chatopen, chatToggle } = useContext(chatContext);
     const {
       playMedia,
       pauseMedia,
@@ -23,7 +23,7 @@ export const RoomHost = ({ roomId }) => {
     } = useContext(hostContext);
     const socket = useContext(SocketContext);
     const user = useContext(AuthContext);
-    const { roomState, setRoomState, StreamMedia, setStreamMedia } =
+    const { StreamMedia, setStreamMedia } =
       useContext(RoomContext);
     const VideoRef = useRef();
   
@@ -36,9 +36,13 @@ export const RoomHost = ({ roomId }) => {
       key: "",
       userArray: [],
     });
-  
     useEffect(() => {
-      setRoomDetails(getRoomDetails(roomId));
+      const fetchdata = async() => {
+        const answer = await getRoomDetails(roomId);
+        setRoomDetails(answer.data);
+      }
+      fetchdata();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedMedia]);
   
     const handleSelect = (e) => {
@@ -260,14 +264,16 @@ export const RoomHost = ({ roomId }) => {
                 <div className="container">
                   <div className="row">
                     <div className="col-12 p-3 border mb-3">
-                      Key: <span className="text-muted">{RoomDetails.key}</span>
+                      <span className="text-muted">Key: {RoomDetails.key}</span>
+                      
+                      <span className="text-muted">  RoomId: {roomId}</span>
                     </div>
   
-                    <div className="col-12">
-                      {/* users connected */}
+                    {/* <div className="col-12">
+                      
                       <h5 className="fs-6">Users Connected</h5>
   
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -278,9 +284,6 @@ export const RoomHost = ({ roomId }) => {
                   data-bs-dismiss="modal"
                 >
                   Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
                 </button>
               </div>
             </div>
